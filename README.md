@@ -6,7 +6,7 @@ Used Crow, Tailwind, Daisy UI
 
 
 # Prerequisite:
-The Crow framework must install on the system (I can't figure out how to dockerize this :<)
+The Crow framework must install on the system (I can't figure out how to dockerize this or make it work with Codeblocks:<)
 ```sh
 wget https://github.com/CrowCpp/Crow/releases/download/v1.2.0/Crow-1.2.0-Linux.deb && apt install Crow-1.2.0-Linux.deb
 ```
