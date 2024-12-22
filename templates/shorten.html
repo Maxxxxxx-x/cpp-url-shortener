@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Start Shortening!</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Welcome to my URL Shortener, written with CPP">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.22/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-base-200">
+    <div class="hero min-h-screen">
+        <div class="hero-content text-center">
+            <div id="content" class="flex flex-col max-w-md">
+                <form id="form" class="flex flex-col justify-center items-center">
+                    <div>
+                        <label for="url" class="text text-center text-3xl py-2">Enter URL to Shorten!</label>
+                        <input required type="url" id="url" name="url" class="input input-bordered w-full"
+                            placeholder="https://example.com">
+                    </div>
+                    <div class="py-2">
+                        <button type="submit" class="btn btn-accent w-xs">Shorten!</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById("form").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const url = document.getElementById("url").value;
+
+            try {
+                const res = await fetch("/shorten", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({url: url})
+                })
+                if (!res.ok) {
+                    throw new Error(`HTTP Error | Status: ${res.status}`)
+                }
+                const data = await res.json()
+                console.log("success")
+                console.log(data);
+                document.getElementById("content").innerHTML = `
+                    <div class="flex flex-row items-center justify-center">
+                        <input type="text" id="shortenedUrl" value="${data.shortened_url}" readonly class="input input-bordered w-full mb-4 px-5" />
+                        <button id="copyBtn" class="btn btn-primary w-xs">Copy</button>
+                    </div>
+                `
+
+                document.getElementById("copyBtn").addEventListener("click", function() {
+                    const shortenedUrl = document.getElementById("shortenedUrl")
+                    shortenedUrl.select()
+                    document.execCommand("copy")
+                })
+            } catch (err) {
+                console.error(err)
+            }
+        })
+    </script>
+</body>
+
+</html>
